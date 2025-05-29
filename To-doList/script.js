@@ -1,65 +1,111 @@
 class ListaDeTarefas {
     constructor() {
-        this.tarefas = [];
-        this.contadorId = 1;
+        this.lista = [];
+        this.idAtual = 1;
     }
 
-    adicionarTarefa() {
-        let inTarefas = prompt("Digite uma tarefa para adicionar:");
-
-        if (inTarefas === "" || inTarefas === null) {
-            alert("[ERRO] Digite uma tarefa válida!");
-            return false;
+    adicionar(textoTarefa) {
+        if (!textoTarefa.trim()) {
+            alert("Digite uma tarefa válida!");
+            return;
         }
 
         const novaTarefa = {
-            id: this.contadorId,
-            inTarefas: inTarefas
+            id: this.idAtual++,
+            texto: textoTarefa,
+            feita: false
         };
-        this.tarefas.push(novaTarefa);
-        this.contadorId += 1;
-        alert("Tarefa adicionada!");
+
+        this.lista.push(novaTarefa);
+        this.mostrarNaTela();
     }
 
-    listarTarefas() {
-        if (this.tarefas.length === 0) {
-            alert("[ERRO] Nenhuma tarefa cadastrada!");
-        } else {
-            let lista = "TAREFAS:\n";
-            for (let contador = 0; contador < this.tarefas.length; contador++) {
-                lista += `${this.tarefas[contador].id}: ${this.tarefas[contador].inTarefas}\n`;
+    marcarComoFeita(id) {
+        for (let i = 0; i < this.lista.length; i++) {
+            if (this.lista[i].id === id) {
+                this.lista[i].feita = true;
+                break;
             }
-            alert(lista);
         }
+        this.mostrarNaTela();
+    }
+
+    apagar(id) {
+        this.lista = this.lista.filter(function (tarefa) {
+            return tarefa.id !== id;
+        });
+        this.mostrarNaTela();
+    }
+
+    mostrarNaTela() {
+        const listaPendentes = document.getElementById("listaTarefas");
+        const listaFeitas = document.getElementById("listaConcluidas");
+
+        listaPendentes.innerHTML = "";
+        listaFeitas.innerHTML = "";
+
+        for (let i = 0; i < this.lista.length; i++) {
+            const tarefa = this.lista[i];
+
+            const item = document.createElement("li");
+            const texto = document.createElement("span");
+            texto.textContent = tarefa.texto;
+
+            const botaoRemover = document.createElement("button");
+            botaoRemover.textContent = "Remover";
+            botaoRemover.className = "btn-remover";
+            botaoRemover.onclick = () => this.apagar(tarefa.id);
+
+            if (tarefa.feita) {
+                // Tarefas concluídas NÃO ficam riscadas
+                texto.style.textDecoration = "none"; // Garantir que não tenha risco
+                texto.style.color = "#000"; // Cor normal para concluídas
+                item.appendChild(texto);
+                item.appendChild(botaoRemover);
+                listaFeitas.appendChild(item);
+            } else {
+                // Tarefas pendentes FICAM riscadas
+                texto.style.textDecoration = "line-through";
+                texto.style.color = "#888";
+
+                const botaoFeita = document.createElement("button");
+                botaoFeita.textContent = "Concluir";
+                botaoFeita.className = "btn-concluir";
+                botaoFeita.style.marginLeft = "10px";
+                botaoFeita.onclick = () => this.marcarComoFeita(tarefa.id);
+
+                item.appendChild(texto);
+                item.appendChild(botaoFeita);
+                item.appendChild(botaoRemover);
+                listaPendentes.appendChild(item);
+            }
+        }
+
+        this.atualizarContagem();
+    }
+
+    atualizarContagem() {
+        const quantasPendentes = this.lista.filter(function (t) {
+            return !t.feita;
+        }).length;
+
+        const quantasFeitas = this.lista.filter(function (t) {
+            return t.feita;
+        }).length;
+
+        const total = this.lista.length;
+
+        const contadores = document.querySelectorAll(".stat-value");
+        contadores[0].textContent = quantasPendentes;
+        contadores[1].textContent = quantasFeitas;
+        contadores[2].textContent = total;
     }
 }
 
-const minhaLista = new ListaDeTarefas();
-let continuar = true;
+const tarefas = new ListaDeTarefas();
 
-while (continuar) {
-    let opcao = prompt(`To-Do List
-        1- Adicionar Tarefas
-        2- Listar Tarefas
-        3- Encerrar Programa`)
-
-    switch (opcao) {
-        case "1":
-            minhaLista.adicionarTarefa()
-            break
-        case "2":
-            minhaLista.listarTarefas()
-            break;
-        case "3":
-            continuar = false; // usuário escolheu sair
-            break;
-        default:
-            alert("Opção inválida!");
-    }
-}
-
-// FUNÇÕES PRA ADICIONAR EM BREVE:
-//removerTarefa(id)
-//editarTarefa(id)
-//concluirTarefa(id)
-//limparTarefas()
+document.getElementById("btnAdicionar").addEventListener("click", function () {
+    const campo = document.getElementById("inputTarefa");
+    tarefas.adicionar(campo.value);
+    campo.value = "";
+});
