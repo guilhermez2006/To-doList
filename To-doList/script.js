@@ -6,12 +6,12 @@ class ListaDeTarefas {
 
     adicionarTarefa() {
         let inTarefas = prompt("Digite uma tarefa para adicionar:");
-        
+
         if (inTarefas === "" || inTarefas === null) {
             alert("[ERRO] Digite uma tarefa válida!");
             return false;
         }
-        
+
         const novaTarefa = {
             id: this.contadorId,
             inTarefas: inTarefas
@@ -19,8 +19,6 @@ class ListaDeTarefas {
         this.tarefas.push(novaTarefa);
         this.contadorId += 1;
         alert("Tarefa adicionada!");
-        
-        return confirm("Deseja cadastrar outra tarefa?");
     }
 
     listarTarefas() {
@@ -36,12 +34,32 @@ class ListaDeTarefas {
     }
 }
 
-// Código principal
 const minhaLista = new ListaDeTarefas();
 let continuar = true;
 
 while (continuar) {
-    continuar = minhaLista.adicionarTarefa();
+    let opcao = prompt(`To-Do List
+        1- Adicionar Tarefas
+        2- Listar Tarefas
+        3- Encerrar Programa`)
+
+    switch (opcao) {
+        case "1":
+            minhaLista.adicionarTarefa()
+            break
+        case "2":
+            minhaLista.listarTarefas()
+            break;
+        case "3":
+            continuar = false; // usuário escolheu sair
+            break;
+        default:
+            alert("Opção inválida!");
+    }
 }
 
-minhaLista.listarTarefas();
+// FUNÇÕES PRA ADICIONAR EM BREVE:
+//removerTarefa(id)
+//editarTarefa(id)
+//concluirTarefa(id)
+//limparTarefas()
