@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+    <h1>To-Do List</h1>
+
+    <div class="main-container">
+        <!-- Container de Adição de Tarefas -->
+        <div class="container">
+            <label id="adicionarTarefaL" for="inputTarefa">Adicionar Tarefa</label>
+
+            <div class="input-area">
+                <input type="text" id="inputTarefa" placeholder="Digite uma tarefa">
+                <button id="btnAdicionar">Adicionar</button>
+            </div>
+        </div>
+
+        <!-- Container de Tarefas Pendentes -->
+        <div class="container">
+            <h2 class="container-title">Tarefas Pendentes</h2>
+            <ul id="listaTarefas">
+
+            </ul>
+        </div>
+
+        <!-- Container de Tarefas Concluídas -->
+        <div class="container">
+            <h2 class="container-title">Tarefas Concluídas</h2>
+            <ul id="listaConcluidas">
+
+            </ul>
+        </div>
+
+        <!-- Container de Estatísticas -->
+        <div class="container stats-container">
+            <h2 class="container-title">Estatísticas</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Pendentes</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Concluídas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/src/main.js"></script>
+</body>
+
+</html>
